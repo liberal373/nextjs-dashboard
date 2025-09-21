@@ -38,21 +38,25 @@ const eslintConfig = [
       'unused-imports': pluginUnusedImports,
     },
     rules: {
-      // 关闭原生规则，避免冲突
+      // 关闭原生和 unused-imports 的 vars 规则
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
+      'unused-imports/no-unused-vars': 'off', // 👈 关掉它
 
-      // 启用 unused-imports 插件的规则
-      'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': [
-        'warn',
+      // ✅ 启用 @typescript-eslint 的完整规则
+      '@typescript-eslint/no-unused-vars': [
+        'error', // 或 'warn'
         {
-          vars: 'all',
-          varsIgnorePattern: '^_',
-          args: 'after-used',
           argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
         },
       ],
+
+      // 保留 unused-imports 删除无用 import 的功能
+      'unused-imports/no-unused-imports': 'error',
+
+      // 关闭 react/react-in-jsx-scope 规则，Next.js 不需要
+      'no-undef': 'off',
     },
   },
   pluginJs.configs.recommended,

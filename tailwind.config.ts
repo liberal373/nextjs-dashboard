@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import forms from '@tailwindcss/forms' // ✅ 改用 import
 
 const config: Config = {
   content: [
@@ -27,6 +28,8 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [
+    forms, // ✅ 直接使用导入的变量
+  ],
 }
 export default config
