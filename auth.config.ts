@@ -1,6 +1,7 @@
 import type { NextAuthConfig } from 'next-auth'
 
 export const authConfig = {
+  trustHost: true, // 👈 添加这一行！允许 localhost 和当前 host
   pages: {
     signIn: '/login',
   },

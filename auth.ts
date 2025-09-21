@@ -5,7 +5,6 @@ import { z } from 'zod'
 import type { User } from '@/app/lib/definitions'
 import bcrypt from 'bcrypt'
 import postgres from 'postgres'
-import type { NextAuthConfig } from 'next-auth'
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' })
 
@@ -19,8 +18,7 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
-// ✅ 创建 NextAuth 配置对象（不是调用 NextAuth()）
-const config = {
+export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -34,6 +32,7 @@ const config = {
           const user = await getUser(email)
           if (!user) return null
           const passwordsMatch = await bcrypt.compare(password, user.password)
+
           if (passwordsMatch) return user
         }
 
@@ -42,7 +41,4 @@ const config = {
       },
     }),
   ],
-} satisfies NextAuthConfig
-
-// ✅ 使用 NextAuth() 生成 handlers（用于 route.ts）和 auth（用于中间件）
-export const { handlers, auth, signIn, signOut } = NextAuth(config)
+})
